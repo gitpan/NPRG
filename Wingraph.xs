@@ -52,6 +52,11 @@ xsCreateEnhMetaFile(hdcref,fn,x1,y1,x2,y2,desc)
          rc.bottom=y2;
          
          hdc=CreateEnhMetaFile(hdcref,fn,&rc,desc);
+         if(hdc==NULL){
+            char str[1000];
+            sprintf(str,"Cannot create metafile!");
+            croak(str);
+         }
          RETVAL = hdc;
        OUTPUT:
          RETVAL
@@ -62,6 +67,9 @@ xsCloseEnhMetaFile(hdc)
        CODE:
         HENHMETAFILE hm;
         hm=CloseEnhMetaFile(hdc);
+        if(hm==NULL){
+            croak("Cannot close metafile!");
+         }
         RETVAL=hm;
        OUTPUT:
         RETVAL
@@ -71,6 +79,9 @@ xsDeleteEnhMetaFile(hdc)
        HDC hdc
        CODE:
         RETVAL=DeleteEnhMetaFile(hdc);
+        if(! RETVAL ){
+            croak("Cannot delete metafile!");
+         }
        OUTPUT:
         RETVAL
         
@@ -80,7 +91,9 @@ xsMoveTo(hdc,x,y)
         int x;
         int y;
        CODE:
-         MoveToEx(hdc,x,y,NULL);  
+         if(!MoveToEx(hdc,x,y,NULL)){  
+            croak("Cannot movetoex!");
+         }
 
 void 
 xsLineTo(hdc,x,y)
@@ -88,7 +101,9 @@ xsLineTo(hdc,x,y)
         int x;
         int y;
        CODE:
-         LineTo(hdc,x,y);  
+         if(!LineTo(hdc,x,y)){
+            croak("Cannot LineTo!");
+         }
 
 HFONT
 xsCreateFont(nHeight,nWidth,nEscapement,nOrientation,fnWeight,fdwItalic,fdwUnderline,fdwStrikeOut,fdwCharset,fdwOutputPrecision,fdwClipPrecision,fdwQuality,fdwPitchAndFamily,Face)
@@ -108,6 +123,13 @@ xsCreateFont(nHeight,nWidth,nEscapement,nOrientation,fnWeight,fdwItalic,fdwUnder
      char *Face;
    CODE:
     RETVAL=CreateFont(nHeight,nWidth,nEscapement,nOrientation,fnWeight,fdwItalic,fdwUnderline,fdwStrikeOut,fdwCharset,fdwOutputPrecision,fdwClipPrecision,fdwQuality,fdwPitchAndFamily,Face);
+
+     if(RETVAL==NULL){
+            char str[1000];
+            sprintf(str,"Cannot create font, error: %s", GetMessageText() );
+            croak(str);
+     }
+
    OUTPUT:
     RETVAL
 
@@ -117,6 +139,9 @@ xsSelectObject(dc,ho)
        HGDIOBJ ho;
      CODE:
        RETVAL=SelectObject(dc,ho);
+       if(RETVAL==NULL){
+           croak("Cannot select object!");
+       }
      OUTPUT:
        RETVAL
 
@@ -125,6 +150,9 @@ xsDeleteObject(obj)
        HGDIOBJ obj;
      CODE:
        RETVAL=DeleteObject(obj);
+       if(RETVAL==NULL){
+           croak("Cannot delete object!");
+       }
      OUTPUT:
        RETVAL
 
@@ -135,7 +163,11 @@ xsTextOut(dc,x,y,s)
       int y;
       char *s;
     CODE:
-      TextOut(dc,x,y,s,strlen(s));
+      if(!TextOut(dc,x,y,s,strlen(s))){
+            char str[1000];
+            sprintf(str,"Cannot textout, error: %s", GetMessageText() );
+            croak(str);
+      }
 
 void 
 xsSetBkMode(dc,mode)
@@ -206,6 +238,11 @@ xsEndPage(dc)
       HDC dc;
      CODE:
       RETVAL=EndPage(dc);
+      if(RETVAL<=0){
+            char str[1000];
+            sprintf(str,"Cannot do end of page, error: %s", GetMessageText() );
+            croak(str);
+         }
      OUTPUT:
       RETVAL
 

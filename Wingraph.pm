@@ -6,7 +6,7 @@ use integer;
 
 require Exporter;
 require DynaLoader;
-$VERSION = '0.2';
+$VERSION = '0.3';
 
 @ISA = qw(Exporter DynaLoader);
 
@@ -102,9 +102,20 @@ sub DESTROY{
         my $self=attr shift;
         my $mh;
 
+        if ( $meta ) {
+                $mh=xsCloseEnhMetaFile($meta);
+                xsDeleteEnhMetaFile($mh);
+        }else{
+                xsEndPage($dc);
+                xsEndDoc($dc);
+                xsDeleteDC($dc);
+        }
+
+
         xsDeleteDC($savedc) if $savedc;
         xsSelectObject($dc,$oldfont);
         xsSelectObject($dc,$oldpen);
+        xsSelectObject($dc,$oldbrush);
 
         for ( keys %fonts ) {
                 xsDeleteObject($fonts{$_});
@@ -118,14 +129,6 @@ sub DESTROY{
                 xsDeleteObject($pens{$_});
         }
 
-        if ( $meta ) {
-                $mh=xsCloseEnhMetaFile($meta);
-                xsDeleteEnhMetaFile($mh);
-        }else{
-                xsEndPage($dc);
-                xsEndDoc($dc);
-                xsDeleteDC($dc);
-        }
 }
 
 ###########################################################################
@@ -172,7 +175,7 @@ sub NextPage($){
        $mh=xsCloseEnhMetaFile($meta);
        xsDeleteEnhMetaFile($mh);
        $metafilename++;
-       $meta=xsCreateEnhMetaFile($savedc,$metafilename.".emf",0,0,
+       $dc=$meta=xsCreateEnhMetaFile($savedc,$metafilename.".emf",0,0,
                                  $self->maxx(),
                                  $self->maxy(),
                                  $desc);

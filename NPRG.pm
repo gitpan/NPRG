@@ -4,7 +4,7 @@ require Exporter;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(drawmatrix);
-$VERSION = '0.01';
+$VERSION = '0.2';
 
 use strict;
 use Carp;

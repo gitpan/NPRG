@@ -1,8 +1,8 @@
 use ExtUtils::testlib;
-use Wingraph;
+use Win32::Wingraph;
 use NPRG qw(drawmatrix);
 
-$dc=new Wingraph( device=>"\\\\LUCENT\\HP LaserJet 1100",  desc=>'test', metafile=>'tsta.emf') or die; #orientation=>'Landscape',
+$dc=new Win32::Wingraph( device=>"\\\\LUCENT\\HP LaserJet 1100",  desc=>'test', metafile=>'tsta.emf') or die; #orientation=>'Landscape',
 print "Start\n";
 %st1=(font=>'Times New Roman Bold', size=>12, opt=>'C', border=>'TBLR', pen=>2);
 

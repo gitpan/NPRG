@@ -1,17 +1,16 @@
 #$Id: Wingraph.pm 1.27 1999/01/24 16:53:33 frolcov Exp frolcov $
-package Wingraph;
+package Win32::Wingraph;
 use Carp;
 use Alias;
 use integer;
 
-$VERSION='0.1';
-
 require Exporter;
 require DynaLoader;
+$VERSION = '0.2';
+
 @ISA = qw(Exporter DynaLoader);
 
 @EXPORT = qw( GDIC drawtext LineTo MoveTo SetBrush SetFont);
-$VERSION = '0.01';
 
 
 # Preloaded methods go here.
@@ -21,7 +20,7 @@ use vars qw($dc $savedc %fonts $oldfont %pens $oldpen %brushes $oldbrush
                 $meta $pagew $pageh $maxx $maxy $metafilename $desc);
 # Autoload methods go after __END__, and are processed by the autosplit program.
 
-bootstrap Wingraph $VERSION;
+bootstrap Win32::Wingraph $VERSION;
 
 ###########################################################################
 sub new{

@@ -30,7 +30,7 @@ char* GetMessageText(void){
 }
 
 
-MODULE = Wingraph         PACKAGE = Wingraph
+MODULE = Win32::Wingraph         PACKAGE = Win32::Wingraph
 
 PROTOTYPES: DISABLE
 
